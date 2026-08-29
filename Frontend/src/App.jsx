@@ -1,6 +1,21 @@
-import React from "react";
-import './App.css'
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import Snippets from "./Components/Snippets";
 function App() {
-  return <div>App</div>;
+  const [snippets, setSnippets] = useState([]);
+  useEffect(() => {
+    async function getSnippets() {
+      const snippets = await fetch("http://localhost:3000");
+      const res = await snippets.json();
+      console.log(res);
+      setSnippets(res);
+    }
+    getSnippets();
+  }, []);
+  return (
+    <div className="container">
+      <Snippets snippets={snippets} />
+    </div>
+  );
 }
 export default App;
