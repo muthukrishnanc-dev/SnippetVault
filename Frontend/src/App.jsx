@@ -14,7 +14,7 @@ function App() {
   }, []);
   return (
     <div className="container">
-      <Snippets snippets={snippets} />
+      <Snippets snippets={snippets} setSnippets={setSnippets} />
     </div>
   );
 }

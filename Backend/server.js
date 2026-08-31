@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require('cors');
+const cors = require("cors");
 const Snippet = require("./snippet");
 const app = express();
 app.use(cors());
@@ -22,7 +22,9 @@ app.get("/snippet", async (req, res) => {
       res.status(400).json({ message: "Enter the search field" });
     }
 
-    const search_snippet = await Snippet.find({ keyword: search });
+    const search_snippet = await Snippet.find({ keyWord: search });
+    console.log(search);
+
     res.status(200).json({ snippet: search_snippet });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -36,7 +38,9 @@ app.post("/", async (req, res) => {
       type: req.body.type,
       snippet: req.body.snippet,
     });
-    res.status(200).json(newSnippet);
+    res
+      .status(200)
+      .json({ message: "Snippet Loaded Successfully", newSnippet: newSnippet });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
