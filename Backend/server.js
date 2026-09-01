@@ -55,9 +55,11 @@ app.patch("/edit/:id", async (req, res) => {
         new: true,
       },
     );
-    res
-      .status(200)
-      .json({ message: "Update successfully", snippet: existing_snippet });
+    res.status(200).json({
+      message: "Update successfully",
+      existing_snippet: existing_snippet,
+    });
+    console.log(existing_snippet);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
