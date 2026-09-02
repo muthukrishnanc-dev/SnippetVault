@@ -21,8 +21,13 @@ function Snippets({ snippets, setSnippets }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(addSnippet),
       });
-      const data = await res.json();
-      console.log(data);
+      if (res.ok) {
+        const data = await res.json();
+        const { newSnippet, message } = data;
+        // console.log(typeof newSnippet,newSnippet)
+        setSnippets([...snippets, newSnippet]);
+        setAddSnippet({ keyword: "", type: "", snippet: "" });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -35,7 +40,6 @@ function Snippets({ snippets, setSnippets }) {
       );
       const data = await res.json();
       setSnippets(data.snippet);
-      console.log(data.snippet);
       setSearchtxt("");
     } catch (error) {
       console.log(error.message);
@@ -67,6 +71,23 @@ function Snippets({ snippets, setSnippets }) {
       console.log(error.message);
     }
   };
+  const handleDelete = async (e, id) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`http://localhost:3000/delete/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const delete_snippet = data.snippet;
+        setSnippets((prev) =>
+          prev.filter((snippet) => snippet._id !== delete_snippet._id),
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="snippet__body">
       <div className="search__snippet">
@@ -82,6 +103,7 @@ function Snippets({ snippets, setSnippets }) {
         </form>
       </div>
       <div className="all__snippets">
+        {snippets.length == 0 && <div>No Snippets</div>}
         {snippets.map((snippet) => (
           <div className="snippet__card" key={snippet._id}>
             {startEdit === snippet._id ? (
@@ -162,7 +184,19 @@ function Snippets({ snippets, setSnippets }) {
                   </button>
                   <button>Summarize</button>
                   <button>Favorite</button>
-                  <button>Copy</button>
+                  <button
+                    onClick={() =>
+                      navigator.clipboard.writeText(snippet.snippet)
+                    }
+                  >
+                    Copy
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => handleDelete(e, snippet._id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </>
             )}

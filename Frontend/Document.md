@@ -76,9 +76,8 @@ error: 1.const data = await res.json();
       console.log(error.message);
     }
   };
-   <button
-                    onClick={() => {
-                      setStartEdit(snippet._id);
+   <button                  onClick={() => {
+                    setStartEdit(snippet._id);
                       setEditSnippet({
                         Edit__keyword: snippet.keyWord,
                         Edit__type: snippet.type,
@@ -86,3 +85,9 @@ error: 1.const data = await res.json();
                       });
                     }}
                     to get a particular edit details use like this this gives populated edit value
+
+2/9/26
+ built : add copy and delete functions and some fixed
+ onClick={() =>
+                      navigator.clipboard.writeText(snippet.snippet)
+                    }
