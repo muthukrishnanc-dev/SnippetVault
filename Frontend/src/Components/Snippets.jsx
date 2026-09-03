@@ -88,6 +88,11 @@ function Snippets({ snippets, setSnippets }) {
       console.log(error);
     }
   };
+  const handleFav = (e, id) => {
+    e.preventDefault();
+    const favSnippets = snippets.filter((snippet) => snippet._id === id);
+    console.log(favSnippets);
+  };
   return (
     <div className="snippet__body">
       <div className="search__snippet">
@@ -183,7 +188,13 @@ function Snippets({ snippets, setSnippets }) {
                     Edit
                   </button>
                   <button>Summarize</button>
-                  <button>Favorite</button>
+                  <button
+                    onClick={(e) => {
+                      handleFav(e, snippet._id);
+                    }}
+                  >
+                    Favorite
+                  </button>
                   <button
                     onClick={() =>
                       navigator.clipboard.writeText(snippet.snippet)

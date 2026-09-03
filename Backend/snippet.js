@@ -16,6 +16,7 @@ const snippetSchema = mongoose.Schema({
     ],
   },
   snippet: { type: String, unique: true },
+  isFavorite: { type: Boolean, default: false },
 });
 
 const User = mongoose.model("Snippets", snippetSchema);
