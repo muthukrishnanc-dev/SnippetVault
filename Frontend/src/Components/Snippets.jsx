@@ -88,11 +88,27 @@ function Snippets({ snippets, setSnippets }) {
       console.log(error);
     }
   };
-  const handleFav = (e, id) => {
+  const handleFav = async (e, snippet) => {
     e.preventDefault();
-    const favSnippets = snippets.filter((snippet) => snippet._id === id);
-    console.log(favSnippets);
+    try {
+      const res = await fetch(`http://localhost:3000/edit/${snippet._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isFavorite: !snippet.isFavorite }),
+      });
+      const data = await res.json();
+      setSnippets((prev) =>
+        prev.map((snippet) =>
+          snippet._id === data.existing_snippet._id
+            ? data.existing_snippet
+            : snippet,
+        ),
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
+  const favoriteSnippets = snippets.filter((snippet) => snippet.isFavorite);
   return (
     <div className="snippet__body">
       <div className="search__snippet">
@@ -108,6 +124,15 @@ function Snippets({ snippets, setSnippets }) {
         </form>
       </div>
       <div className="all__snippets">
+        {favoriteSnippets.length == 0 ? (
+          <div>No Favorite Snippets</div>
+        ) : (
+          favoriteSnippets.map((snippet) => (
+            <li key={snippet._id} style={{ color: "red" }}>
+              {snippet.snippet}
+            </li>
+          ))
+        )}
         {snippets.length == 0 && <div>No Snippets</div>}
         {snippets.map((snippet) => (
           <div className="snippet__card" key={snippet._id}>
@@ -190,10 +215,10 @@ function Snippets({ snippets, setSnippets }) {
                   <button>Summarize</button>
                   <button
                     onClick={(e) => {
-                      handleFav(e, snippet._id);
+                      handleFav(e, snippet);
                     }}
                   >
-                    Favorite
+                    {!snippet.isFavorite ? "🤍" : "❤"}
                   </button>
                   <button
                     onClick={() =>
