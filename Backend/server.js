@@ -50,7 +50,7 @@ app.patch("/edit/:id", async (req, res) => {
   try {
     const existing_snippet = await Snippet.findByIdAndUpdate(
       req.params.id,
-      { snippet: req.body.snippet },
+      { snippet: req.body.snippet, isFavorite: req.body.isFavorite },
       {
         new: true,
       },
