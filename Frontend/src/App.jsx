@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import "./App.css";
 import Snippets from "./Components/Snippets";
 function App() {
@@ -14,7 +16,14 @@ function App() {
   }, []);
   return (
     <div className="container">
-      <Snippets snippets={snippets} setSnippets={setSnippets} />
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<Snippets snippets={snippets} setSnippets={setSnippets} />}
+          />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
