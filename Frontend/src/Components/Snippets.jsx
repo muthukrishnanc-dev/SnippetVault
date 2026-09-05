@@ -218,7 +218,7 @@ function Snippets({ snippets, setSnippets }) {
                       handleFav(e, snippet);
                     }}
                   >
-                    {!snippet.isFavorite ? "🤍" : "❤"}
+                    {!snippet.isFavorite ? "🤍" : "✔"}
                   </button>
                   <button
                     onClick={() =>

@@ -19,15 +19,21 @@ app.get("/snippet", async (req, res) => {
   try {
     const { search } = req.query;
     if (search == undefined) {
-      res.status(400).json({ message: "Enter the search field" });
+      return res.status(400).json({ message: "Enter the search field" });
+    } else if (search.length == 0) {
+      return res.status(400).json({ message: "Search query cannot be empty" });
+    } else {
+      const search_snippet = await Snippet.find({ keyWord: search });
+      if (search_snippet.length == 0) {
+        return res
+          .status(404)
+          .json({ message: `there is no such keyword name ${search}` });
+      } else {
+        return res.status(200).json({ snippet: search_snippet });
+      }
     }
-
-    const search_snippet = await Snippet.find({ keyWord: search });
-    console.log(search);
-
-    res.status(200).json({ snippet: search_snippet });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 });
 
@@ -50,7 +56,12 @@ app.patch("/edit/:id", async (req, res) => {
   try {
     const existing_snippet = await Snippet.findByIdAndUpdate(
       req.params.id,
-      { snippet: req.body.snippet, isFavorite: req.body.isFavorite },
+      {
+        snippet: req.body.snippet,
+        isFavorite: req.body.isFavorite,
+        keyword: req.body.keyword,
+        type: req.body.type,
+      },
       {
         new: true,
       },
